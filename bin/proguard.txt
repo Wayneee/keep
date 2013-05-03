@@ -1,3 +1,0 @@
-# view AndroidManifest.xml #generated:20
--keep class com.sbt.Keep.MainActivity { <init>(...); }
-

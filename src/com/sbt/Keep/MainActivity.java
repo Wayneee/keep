@@ -1,37 +1,27 @@
 package com.sbt.Keep;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import com.db4o.Db4oEmbedded;
-import com.db4o.ObjectContainer;
-import com.db4o.ObjectSet;
-import com.sbt.Keep.Data.Expense;
-import com.sbt.Keep.Helper.DbHelper;
-import com.sbt.Keep.Helper.SpreadsheetHelper;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.database.DataSetObserver;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
-import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
+
+import com.sbt.Keep.Data.Expense;
+import com.sbt.Keep.Helper.SpreadsheetHelper;
 
 public class MainActivity extends Activity {
 	protected static final int REQUEST_CREATE_SPREADSHEET = 1;
