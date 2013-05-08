@@ -38,13 +38,12 @@ import com.google.gdata.util.ServiceException;
 import com.google.gdata.util.common.base.StringUtil;
 
 public class SpreadsheetHelper {
-	private static final String ITEM_DESCRIPTION = "Add by android";
+	private static final String ITEM_DESCRIPTION = "Add by android on ";
 	private static final int REQUEST_LOAD_SPREADSHEET = 0;
 	private static final String SPREADSHEET_AUTHTYPE = "oauth2:https://spreadsheets.google.com/feeds/";
 	private static final String SPREADSHEET_FEED_URL = "https://spreadsheets.google.com/feeds/spreadsheets/private/full";
 	private static final String SPREADSHEET_NAME = "日常開資";
-	private static final String ITEM_PAID_BY = "Android";
-	//private String accountName = "tsangchungwing@gmail.com";
+	private static String ITEM_PAID_BY = "Android";
 	private String authToken;
 
 	private Activity context;
@@ -57,7 +56,9 @@ public class SpreadsheetHelper {
 		GoogleAccountCredential googleCredential = GoogleAccountCredential.usingOAuth2(context, "https://spreadsheets.google.com/feeds",
 				"https://docs.google.com/feeds");
 		
-		googleCredential.setSelectedAccountName(googleCredential.getAllAccounts()[0].name);
+		ITEM_PAID_BY = googleCredential.getAllAccounts()[0].name;
+		
+		googleCredential.setSelectedAccountName(ITEM_PAID_BY);
 		Credential credential = new GoogleCredential.Builder().setTransport(AndroidHttp.newCompatibleTransport()).setJsonFactory(new GsonFactory())
 				.setRequestInitializer(googleCredential).build();
 
@@ -129,9 +130,11 @@ public class SpreadsheetHelper {
 
 							// [date, year, month, weekday, type, item, amount,
 							// paidby]
-							entry.getCustomElements().setValueLocal("date", (String) DateFormat.format("yyyy-MM-dd h:mm:ss", new Date()));
+							Date postDate = new Date();
+							
+							entry.getCustomElements().setValueLocal("date", (String) DateFormat.format("yyyy-MM-dd h:mm:ss", postDate));
 							entry.getCustomElements().setValueLocal("amount", amount);
-							entry.getCustomElements().setValueLocal("item", ITEM_DESCRIPTION);
+							entry.getCustomElements().setValueLocal("item", ITEM_DESCRIPTION +(String) DateFormat.format("h:mm:ss", postDate) );
 							entry.getCustomElements().setValueLocal("paidby", ITEM_PAID_BY);
 
 							if (isNew) {
