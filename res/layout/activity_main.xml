@@ -6,9 +6,11 @@
 
     <ListView
         android:id="@+id/historyView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/addButton"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/priceText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         tools:listitem="@android:layout/simple_list_item_checked" >
 
@@ -18,19 +20,101 @@
         android:id="@+id/priceText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@+id/buttonGrid"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/historyView"
-        android:layout_toLeftOf="@+id/addButton"
+        android:layout_alignParentRight="true"
         android:ems="10"
-        android:inputType="numberDecimal" />
+        android:inputType="numberDecimal" >
 
-    <Button
-        android:id="@+id/addButton"
+        <requestFocus />
+    </EditText>
+
+    <GridLayout
+        android:id="@+id/buttonGrid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:text="@string/add" />
+        android:columnCount="4"
+        android:orientation="horizontal"
+        android:rowCount="4" >
+
+        <Button
+            android:id="@+id/addButton7"
+            android:layout_width="80dp"
+            android:layout_height="48dp"
+            android:text="買餸" />
+        <Button
+            android:id="@+id/addButton6"
+            android:layout_width="80dp"
+            android:layout_height="48dp"
+            android:text="街市" />
+
+
+        <Button
+            android:id="@+id/addButton8"
+            android:layout_width="80dp"
+            android:layout_height="48dp"
+            android:text="買飯" />
+        
+        <Button
+            android:id="@+id/addButton1"
+            android:layout_width="80dp"
+            android:layout_height="48dp"
+            android:text="百佳" />
+
+        <Button
+            android:id="@+id/addButton2"
+            android:layout_width="80dp"
+            android:layout_height="48dp"
+            android:text="759" />
+
+        <Button
+            android:id="@+id/addButton3"
+            android:layout_width="80dp"
+            android:layout_height="48dp"
+            android:text="AEON" />
+
+        <Button
+            android:id="@+id/addButton4"
+            android:layout_width="80dp"
+            android:layout_height="48dp"
+            android:text="惠康" />
+
+        <Button
+            android:id="@+id/addButton5"
+            android:layout_width="80dp"
+            android:layout_height="48dp"
+            android:text="超市" />
+
+        <Button
+            android:id="@+id/addButton9"
+            android:layout_width="80dp"
+            android:layout_height="48dp"
+            android:text="早餐" />
+
+        <Button
+            android:id="@+id/addButton10"
+            android:layout_width="80dp"
+            android:layout_height="48dp"
+            android:text="午餐" />
+
+        <Button
+            android:id="@+id/addButton11"
+            android:layout_width="80dp"
+            android:layout_height="48dp"
+            android:text="下午茶" />
+
+        <Button
+            android:id="@+id/addButton12"
+            android:layout_width="80dp"
+            android:layout_height="48dp"
+            android:layout_column="3"
+            android:layout_gravity="left|center_vertical"
+            android:layout_row="2"
+            android:text="晚餐" />
+    </GridLayout>
 
 </RelativeLayout>

@@ -21,6 +21,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.sbt.Keep.Data.Expense;
+import com.sbt.Keep.Helper.AddButtonClickListener;
 import com.sbt.Keep.Helper.SpreadsheetHelper;
 
 public class MainActivity extends Activity {
@@ -28,14 +29,6 @@ public class MainActivity extends Activity {
 	protected static final int REQUEST_LOAD_SPREADSHEET = 0;
 	protected static final String SPREADSHEET_AUTHTYPE = "oauth2:https://spreadsheets.google.com/feeds/";
 	private ExpenseAdapter historyAdapter;
-	private ArrayList<Integer> syncedId = new ArrayList<Integer>();
-
-	protected boolean isSynced(final int position) {
-		// return syncedId.contains(position);
-		// get by db.
-
-		return false;
-	}
 
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
@@ -54,11 +47,6 @@ public class MainActivity extends Activity {
 
 			@Override
 			public boolean onMenuItemClick(MenuItem item) {
-//				DbHelper dbHelper = new DbHelper(item.getActionView().getContext());
-//				dbHelper.db().query(arg0).store(expenses);
-//				dbHelper.db().commit();
-//				dbHelper.db().close();
-				
 				
 				return false;
 			}
@@ -74,56 +62,38 @@ public class MainActivity extends Activity {
 
 		historyAdapter = new ExpenseAdapter(this, android.R.layout.simple_list_item_1);
 
-		// load db
-//		DbHelper dbHelper = new DbHelper(this);
-//		List<Expense> query = dbHelper.db().queryByExample(Expense.class);
-//		for (Expense exp : query) {
-//			historyAdapter.add(exp);
-//		}
-//
-//		dbHelper.db().close();
-
-		historyAdapter.registerDataSetObserver(new DataSetObserver() {
-
-			@Override
-			public void onChanged() {
-				// TODO Auto-generated method stub
-				super.onChanged();
-
-				syncData();
-			}
-
-		});
-
 		historyView.setAdapter(historyAdapter);
 
 		// setup button
-		final Button addButton = (Button) findViewById(R.id.addButton);
+		final Button addButton1 = (Button) findViewById(R.id.addButton1);
+		final Button addButton2 = (Button) findViewById(R.id.addButton2);
+		final Button addButton3 = (Button) findViewById(R.id.addButton3);
+		final Button addButton4 = (Button) findViewById(R.id.addButton4);
+		final Button addButton5 = (Button) findViewById(R.id.addButton5);
+		final Button addButton6 = (Button) findViewById(R.id.addButton6);
+		final Button addButton7 = (Button) findViewById(R.id.addButton7);
+		final Button addButton8 = (Button) findViewById(R.id.addButton8);
+		final Button addButton9 = (Button) findViewById(R.id.addButton9);
+		final Button addButton10 = (Button) findViewById(R.id.addButton10);
+		final Button addButton11 = (Button) findViewById(R.id.addButton11);
+		final Button addButton12 = (Button) findViewById(R.id.addButton12);
+		
+		AddButtonClickListener addButtonClickListener = new AddButtonClickListener();
+		addButtonClickListener.setHistoryAdapter(historyAdapter);
+		addButtonClickListener.setActivity(this);
 
-		addButton.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(final View v) {
-				// get text
-				final EditText priceText = (EditText) findViewById(R.id.priceText);
-
-				final Editable text = priceText.getText();
-
-				if (text.length() > 0) {
-					// add to list
-					historyAdapter.add(text.toString());
-					historyAdapter.notifyDataSetChanged();
-
-					priceText.setText("");
-
-					final ListView historyView = (ListView) findViewById(R.id.historyView);
-
-					final int newPosition = historyAdapter.getCount() - 1;
-
-					historyView.setSelection(newPosition);
-				}
-			}
-		});
+		addButton1.setOnClickListener(addButtonClickListener);
+		addButton2.setOnClickListener(addButtonClickListener);
+		addButton3.setOnClickListener(addButtonClickListener);
+		addButton4.setOnClickListener(addButtonClickListener);
+		addButton5.setOnClickListener(addButtonClickListener);
+		addButton6.setOnClickListener(addButtonClickListener);
+		addButton7.setOnClickListener(addButtonClickListener);
+		addButton8.setOnClickListener(addButtonClickListener);
+		addButton9.setOnClickListener(addButtonClickListener);
+		addButton10.setOnClickListener(addButtonClickListener);
+		addButton11.setOnClickListener(addButtonClickListener);
+		addButton12.setOnClickListener(addButtonClickListener);
 
 		final EditText priceText = (EditText) findViewById(R.id.priceText);
 
@@ -134,7 +104,7 @@ public class MainActivity extends Activity {
 			public boolean onKey(final View v, final int keyCode, final KeyEvent event) {
 
 				if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
-					final Button addButton = (Button) findViewById(R.id.addButton);
+					final Button addButton = (Button) findViewById(R.id.addButton7);
 					addButton.performClick();
 
 					return true;
@@ -148,38 +118,4 @@ public class MainActivity extends Activity {
 
 		this.setTitle("");
 	}
-
-	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-	protected void syncData() {
-		final int count = historyAdapter.getCount();
-
-		final ArrayList<String> amounts = new ArrayList<String>(count);
-
-		ArrayList<Expense> expenses = new ArrayList<Expense>();
-
-		int start = 0;
-		if (syncedId.size() > 0) {
-			start = syncedId.get(syncedId.size() - 1) + 1;
-		}
-
-		for (int i = start; i < count; i++) {
-			amounts.add(historyAdapter.getItem(i));
-
-			syncedId.add(i);
-
-			expenses.add(new Expense(Double.parseDouble(historyAdapter.getItem(i))));
-		}
-
-		// save to database
-//		DbHelper dbHelper = new DbHelper(this);
-//		dbHelper.db().store(expenses);
-//		dbHelper.db().commit();
-//		dbHelper.db().close();
-
-		SpreadsheetHelper helper = new SpreadsheetHelper(this);
-		helper.startSync(amounts);
-
-		// get upload status
-	}
-
 }

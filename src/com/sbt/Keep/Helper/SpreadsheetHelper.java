@@ -27,6 +27,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.NotificationCompat;
 import android.text.format.DateFormat;
 import android.widget.Toast;
@@ -48,6 +49,7 @@ import com.google.gdata.data.spreadsheet.WorksheetEntry;
 import com.google.gdata.util.ServiceException;
 import com.google.gdata.util.common.base.StringUtil;
 import com.sbt.Keep.MainActivity;
+import com.sbt.Keep.Data.Expense;
 
 public class SpreadsheetHelper {
 	private static final String ITEM_DESCRIPTION = "Add by android on ";
@@ -97,16 +99,15 @@ public class SpreadsheetHelper {
 		if (resultCode == Activity.RESULT_OK) {
 			switch (requestCode) {
 			case REQUEST_LOAD_SPREADSHEET:
-				;
-				startSync(data.getStringArrayListExtra("amounts"));
+				startSync((Expense)data.getSerializableExtra("expense"));
 				break;
 			}
 		}
 	}
 
 	public static int notificationCount = 0;
-	
-	private void processData(final ArrayList<String> arrayList)
+
+	private void processData(final Expense expense)
 			throws IOException, ServiceException {
 
 		SpreadsheetQuery query = new SpreadsheetQuery(new URL(
@@ -118,9 +119,9 @@ public class SpreadsheetHelper {
 		AsyncTask<SpreadsheetQuery, Integer, String> asyncTask = new AsyncTask<SpreadsheetQuery, Integer, String>() {
 
 			protected void onPostExecute(String result) {
-				if (result != null && result != "[]" ) {
-					String notifyContext = SPREADSHEET_NAME + " Updated, $"
-							+ result.replace("[", "").replace("]", "");
+				if (result != null && result != "[]") {
+					String notifyContext = SPREADSHEET_NAME + " Updated, "
+							+ result;
 					Toast.makeText(context, notifyContext, Toast.LENGTH_LONG)
 							.show();
 
@@ -155,7 +156,8 @@ public class SpreadsheetHelper {
 					NotificationManager mNotificationManager = (NotificationManager) context
 							.getSystemService(Context.NOTIFICATION_SERVICE);
 					// mId allows you to update the notification later on.
-					mNotificationManager.notify(notificationCount++,mBuilder.build());
+					mNotificationManager.notify(notificationCount++,
+							mBuilder.build());
 				}
 			}
 
@@ -179,8 +181,6 @@ public class SpreadsheetHelper {
 										ListFeed.class);
 
 						boolean isNew = false;
-						for (String amount : arrayList) {
-
 							ListEntry entry = null;
 
 							// find a empty row for update.
@@ -217,26 +217,31 @@ public class SpreadsheetHelper {
 									"date",
 									(String) DateFormat.format(
 											"yyyy-MM-dd h:mm:ss", postDate));
+							
 							entry.getCustomElements().setValueLocal(
 									"year",
 									(String) DateFormat
 											.format("yyyy", postDate));
+							
 							entry.getCustomElements().setValueLocal("month",
 									(String) DateFormat.format("M", postDate));
+							
 							entry.getCustomElements()
 									.setValueLocal(
 											"weekday",
 											(String) DateFormat.format("EEE",
 													postDate));
+							
 							entry.getCustomElements().setValueLocal("type",
 									"週不時");
+							
 							entry.getCustomElements().setValueLocal("amount",
-									amount);
+									Double.toString(expense.getAmount()));
+							
 							entry.getCustomElements().setValueLocal(
 									"item",
-									ITEM_DESCRIPTION
-											+ (String) DateFormat.format(
-													"h:mm:ss", postDate));
+									expense.getItem());
+							
 							entry.getCustomElements().setValueLocal("paidby",
 									ITEM_PAID_BY_MAP.get(ITEM_PAID_BY));
 
@@ -246,9 +251,8 @@ public class SpreadsheetHelper {
 							} else {
 								entry.update();
 							}
-						}
 
-						return Arrays.toString(arrayList.toArray());
+						return expense.toString();
 					} else {
 						// create spreadsheet
 					}
@@ -268,7 +272,7 @@ public class SpreadsheetHelper {
 	}
 
 	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-	public void startSync(final ArrayList<String> arrayList) {
+	public void startSync(final Expense expense) {
 		// get auth
 		AccountManager am = AccountManager.get(context);
 		Account[] accounts = am
@@ -286,13 +290,13 @@ public class SpreadsheetHelper {
 							if (authToken == null) {
 								Intent intent = (Intent) result
 										.get(AccountManager.KEY_INTENT);
-								intent.putExtra("amounts", arrayList);
+								intent.putExtra("expense",  expense);
 
 								context.startActivityForResult(intent,
 										REQUEST_LOAD_SPREADSHEET);
 
 							} else {
-								processData(arrayList);
+								processData(expense);
 							}
 						} catch (OperationCanceledException e) {
 							// TODO Auto-generated catch block

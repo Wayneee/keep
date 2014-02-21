@@ -1,8 +1,13 @@
 package com.sbt.Keep.Data;
 
+import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.Date;
 
-public class Expense {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Expense implements Serializable {
 	private double amount;
 	private Date date;
 	private String id;
@@ -10,15 +15,15 @@ public class Expense {
 	private String paidBy;
 	private UploadStatus status;
 	private String type;
+	private DecimalFormat decimalFormat = new DecimalFormat("0.##");
 
-	public Expense(final double amount) {
-		super();
+	@Override
+	public String toString() {
+		return this.item + ", $" + decimalFormat.format(this.amount);
+	}
 
-		this.amount = amount;
-		date = new Date();
-		item = "By android";
-		paidBy = "河童";
-		status = UploadStatus.Pending;
+	public Expense() {
+		// TODO Auto-generated constructor stub
 	}
 
 	public double getAmount() {

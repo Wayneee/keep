@@ -1,6 +1,5 @@
 package com.sbt.Keep;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import android.content.Context;
@@ -11,9 +10,8 @@ import android.widget.TextView;
 
 import com.sbt.Keep.Data.Expense;
 
-public class ExpenseAdapter extends ArrayAdapter<String> {
+public class ExpenseAdapter extends ArrayAdapter<Expense> {
 
-	private DecimalFormat decimalFormat = new DecimalFormat("0.##");
 	private ArrayList<Expense> expenses = new ArrayList<Expense>();
 
 	public ArrayList<Expense> getExpenses() {
@@ -22,38 +20,24 @@ public class ExpenseAdapter extends ArrayAdapter<String> {
 
 	public ExpenseAdapter(Context context, int textViewResourceId) {
 		super(context, textViewResourceId);
-	}
-
-	public void add(Expense exp) {
-		expenses.add(exp);
-
-		super.add(decimalFormat.format(exp.getAmount()));
-	}
-
+	}	
+	
 	@Override
-	public void add(String amount) {
-		Expense exp = new Expense(Double.parseDouble(amount));
-		add(exp);
+	public void add(Expense object) {
+		super.add(object);
+		
+		this.expenses.add(object);
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		TextView view = (TextView) super.getView(position, convertView, parent);
 
-//		if (position > 0 && expenses.size() < position - 1) {
-//			switch (expenses.get(position-1).getStatus()) {
-//			case Completed:
-//				view.setTextColor(0xFF14700F);
-//				break;
-//			case Pending:
-//			case Queue:
-//			default:
-//				view.setTextColor(Color.BLACK);
-//				break;
-//			}
-//		}
-
 		return view;
+	}
+
+	public void setExpenses(ArrayList<Expense> expenses) {
+		this.expenses = expenses;
 	}
 
 }
