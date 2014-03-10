@@ -2,9 +2,11 @@ package com.sbt.Keep.Helper;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import android.R;
 import android.accounts.Account;
@@ -206,7 +208,8 @@ public class SpreadsheetHelper {
 							// [date, year, month, weekday, type, item, amount,
 							// paidby]
 							Date postDate = new Date();
-
+							Locale.setDefault(Locale.US);
+							
 							entry.getCustomElements().setValueLocal(
 									"date",
 									(String) DateFormat.format(
@@ -221,10 +224,10 @@ public class SpreadsheetHelper {
 									(String) DateFormat.format("M", postDate));
 							
 							entry.getCustomElements()
-									.setValueLocal(
-											"weekday",
-											(String) DateFormat.format("EEE",
-													postDate));
+							.setValueLocal(
+									"weekday",
+									(String) DateFormat.format("EEE",
+											postDate));
 							
 							entry.getCustomElements().setValueLocal("type",
 									"週不時");
