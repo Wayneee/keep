@@ -1,28 +1,19 @@
 package com.sbt.Keep;
 
-import java.util.ArrayList;
-
-import android.annotation.TargetApi;
 import android.app.Activity;
-import android.database.DataSetObserver;
-import android.os.Build;
 import android.os.Bundle;
-import android.text.Editable;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnKeyListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 
-import com.sbt.Keep.Data.Expense;
 import com.sbt.Keep.Helper.AddButtonClickListener;
-import com.sbt.Keep.Helper.SpreadsheetHelper;
 
 public class MainActivity extends Activity {
 	protected static final int REQUEST_CREATE_SPREADSHEET = 1;
@@ -43,16 +34,17 @@ public class MainActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.activity_main, menu);
 		MenuItem clearHistoryMenu = menu.findItem(R.id.clear_history);
-		clearHistoryMenu.setOnMenuItemClickListener(new OnMenuItemClickListener(){
+		clearHistoryMenu
+				.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
-			@Override
-			public boolean onMenuItemClick(MenuItem item) {
-				
-				return false;
-			}
-			
-		});
-		
+					@Override
+					public boolean onMenuItemClick(MenuItem item) {
+
+						return false;
+					}
+
+				});
+
 		return true;
 	}
 
@@ -60,7 +52,8 @@ public class MainActivity extends Activity {
 		// init history list
 		final ListView historyView = (ListView) findViewById(R.id.historyView);
 
-		historyAdapter = new ExpenseAdapter(this, android.R.layout.simple_list_item_1);
+		historyAdapter = new ExpenseAdapter(this,
+				android.R.layout.simple_list_item_1);
 
 		historyView.setAdapter(historyAdapter);
 
@@ -77,7 +70,7 @@ public class MainActivity extends Activity {
 		final Button addButton10 = (Button) findViewById(R.id.addButton10);
 		final Button addButton11 = (Button) findViewById(R.id.addButton11);
 		final Button addButton12 = (Button) findViewById(R.id.addButton12);
-		
+
 		AddButtonClickListener addButtonClickListener = new AddButtonClickListener();
 		addButtonClickListener.setHistoryAdapter(historyAdapter);
 		addButtonClickListener.setActivity(this);
@@ -98,13 +91,16 @@ public class MainActivity extends Activity {
 		final EditText priceText = (EditText) findViewById(R.id.priceText);
 
 		priceText.setImeOptions(EditorInfo.IME_ACTION_DONE);
+		priceText.setImeActionLabel(addButton4.getText(),
+				EditorInfo.IME_ACTION_DONE);
+		priceText.setOnEditorActionListener(new OnEditorActionListener() {
 
-		priceText.setOnKeyListener(new OnKeyListener() {
 			@Override
-			public boolean onKey(final View v, final int keyCode, final KeyEvent event) {
-
-				if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
-					final Button addButton = (Button) findViewById(R.id.addButton7);
+			public boolean onEditorAction(TextView v, int actionId,
+					KeyEvent event) {
+				if (actionId == EditorInfo.IME_ACTION_DONE) {
+					final Button addButton = (Button) ((Activity) v
+							.getContext()).findViewById(R.id.addButton4);
 					addButton.performClick();
 
 					return true;
@@ -112,8 +108,8 @@ public class MainActivity extends Activity {
 
 				return false;
 			}
-		});
 
+		});
 		priceText.requestFocus();
 
 		this.setTitle("");

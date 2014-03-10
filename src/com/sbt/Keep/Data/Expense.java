@@ -4,10 +4,11 @@ import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.Date;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 public class Expense implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 695677476826163868L;
 	private double amount;
 	private Date date;
 	private String id;
@@ -23,7 +24,6 @@ public class Expense implements Serializable {
 	}
 
 	public Expense() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public double getAmount() {

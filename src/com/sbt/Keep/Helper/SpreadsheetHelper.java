@@ -2,12 +2,9 @@ package com.sbt.Keep.Helper;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import android.R;
 import android.accounts.Account;
@@ -18,7 +15,6 @@ import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
@@ -27,7 +23,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.app.NotificationCompat;
 import android.text.format.DateFormat;
 import android.widget.Toast;
@@ -52,7 +47,6 @@ import com.sbt.Keep.MainActivity;
 import com.sbt.Keep.Data.Expense;
 
 public class SpreadsheetHelper {
-	private static final String ITEM_DESCRIPTION = "Add by android on ";
 	private static final int REQUEST_LOAD_SPREADSHEET = 0;
 	private static final String SPREADSHEET_AUTHTYPE = "oauth2:https://spreadsheets.google.com/feeds/";
 	private static final String SPREADSHEET_FEED_URL = "https://spreadsheets.google.com/feeds/spreadsheets/private/full";
@@ -257,10 +251,8 @@ public class SpreadsheetHelper {
 						// create spreadsheet
 					}
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (ServiceException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 
@@ -271,7 +263,7 @@ public class SpreadsheetHelper {
 		asyncTask.execute(query);
 	}
 
-	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	public void startSync(final Expense expense) {
 		// get auth
 		AccountManager am = AccountManager.get(context);
@@ -290,7 +282,7 @@ public class SpreadsheetHelper {
 							if (authToken == null) {
 								Intent intent = (Intent) result
 										.get(AccountManager.KEY_INTENT);
-								intent.putExtra("expense",  expense);
+								//intent.putExtra("expense",  expense);
 
 								context.startActivityForResult(intent,
 										REQUEST_LOAD_SPREADSHEET);
@@ -299,16 +291,12 @@ public class SpreadsheetHelper {
 								processData(expense);
 							}
 						} catch (OperationCanceledException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						} catch (AuthenticatorException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						} catch (IOException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						} catch (ServiceException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 
