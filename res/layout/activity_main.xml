@@ -50,9 +50,9 @@
 
             <Button
                 android:id="@+id/addButton3"
-                android:text="超市" />
+                android:text="家品" />
             <Button
-                android:id="@+id/addButton4"
+                android:id="@+id/addButtonOthers"
                 android:text="未定義" />
         </TableRow>
 

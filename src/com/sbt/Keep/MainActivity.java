@@ -1,11 +1,17 @@
 package com.sbt.Keep;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,6 +26,7 @@ public class MainActivity extends Activity {
 	protected static final int REQUEST_LOAD_SPREADSHEET = 0;
 	protected static final String SPREADSHEET_AUTHTYPE = "oauth2:https://spreadsheets.google.com/feeds/";
 	private ExpenseAdapter historyAdapter;
+	private final Activity context = this;
 
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
@@ -61,7 +68,7 @@ public class MainActivity extends Activity {
 		final Button addButton1 = (Button) findViewById(R.id.addButton1);
 		final Button addButton2 = (Button) findViewById(R.id.addButton2);
 		final Button addButton3 = (Button) findViewById(R.id.addButton3);
-		final Button addButton4 = (Button) findViewById(R.id.addButton4);
+		final Button addButtonOthers = (Button) findViewById(R.id.addButtonOthers);
 		final Button addButton5 = (Button) findViewById(R.id.addButton5);
 		final Button addButton6 = (Button) findViewById(R.id.addButton6);
 		final Button addButton7 = (Button) findViewById(R.id.addButton7);
@@ -78,7 +85,7 @@ public class MainActivity extends Activity {
 		addButton1.setOnClickListener(addButtonClickListener);
 		addButton2.setOnClickListener(addButtonClickListener);
 		addButton3.setOnClickListener(addButtonClickListener);
-		addButton4.setOnClickListener(addButtonClickListener);
+		//addButtonOthers.setOnClickListener(addButtonClickListener);
 		addButton5.setOnClickListener(addButtonClickListener);
 		addButton6.setOnClickListener(addButtonClickListener);
 		addButton7.setOnClickListener(addButtonClickListener);
@@ -87,11 +94,43 @@ public class MainActivity extends Activity {
 		addButton10.setOnClickListener(addButtonClickListener);
 		addButton11.setOnClickListener(addButtonClickListener);
 		addButton12.setOnClickListener(addButtonClickListener);
+		
+		addButtonOthers.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				AlertDialog.Builder builder = new AlertDialog.Builder(context);
+				LayoutInflater li = LayoutInflater.from(context);
+				View promptsView = li.inflate(R.layout.prompt, null);
+				builder.setView(promptsView);
+ 
+				final EditText userInput = (EditText) promptsView
+						.findViewById(R.id.editTextDialogUserInput);
+				
+				userInput.setText("未定義");
+				builder.setCancelable(true);
+				
+				builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+
+						AddButtonClickListener addButtonClickListener = new AddButtonClickListener();
+						addButtonClickListener.setHistoryAdapter(historyAdapter);
+						addButtonClickListener.setItem(userInput.getText().toString());
+						
+						addButtonClickListener.setActivity(context);
+						addButtonClickListener.onClick(null);
+					}});
+				
+				builder.create();
+				builder.show();
+			}});
 
 		final EditText priceText = (EditText) findViewById(R.id.priceText);
 
 		priceText.setImeOptions(EditorInfo.IME_ACTION_DONE);
-		priceText.setImeActionLabel(addButton4.getText(),
+		priceText.setImeActionLabel(addButtonOthers.getText(),
 				EditorInfo.IME_ACTION_DONE);
 		priceText.setOnEditorActionListener(new OnEditorActionListener() {
 
@@ -100,7 +139,7 @@ public class MainActivity extends Activity {
 					KeyEvent event) {
 				if (actionId == EditorInfo.IME_ACTION_DONE) {
 					final Button addButton = (Button) ((Activity) v
-							.getContext()).findViewById(R.id.addButton4);
+							.getContext()).findViewById(R.id.addButtonOthers);
 					addButton.performClick();
 
 					return true;
