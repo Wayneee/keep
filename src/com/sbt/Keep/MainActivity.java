@@ -13,6 +13,7 @@ import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -123,8 +124,20 @@ public class MainActivity extends Activity {
 						addButtonClickListener.onClick(null);
 					}});
 				
+				
 				builder.create();
 				builder.show();
+
+				userInput.requestFocus();
+				userInput.selectAll();
+				userInput.postDelayed(new Runnable() {
+	                    @Override
+	                    public void run() {
+	                        InputMethodManager keyboard = (InputMethodManager)
+	                        getSystemService(Context.INPUT_METHOD_SERVICE);
+	                        keyboard.showSoftInput(userInput, 0);
+	                    }
+	                },200);
 			}});
 
 		final EditText priceText = (EditText) findViewById(R.id.priceText);
